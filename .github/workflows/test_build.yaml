@@ -18,9 +18,9 @@ jobs:
           java-version: 25
       - name: Maven Test and Build verify phase
         run: mvn -B -U verify
-      - uses: actions/upload-artifact@v4
       - name: Generate Artifact  
         run: mkdir staging && cp target/*.jar staging/app.jar
+      - uses: actions/upload-artifact@v4
         with:
           name: App
           path: staging/app.jar
