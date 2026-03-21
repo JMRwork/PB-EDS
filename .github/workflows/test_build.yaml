@@ -1,0 +1,32 @@
+name: PB-EDS - Test and build on Push
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: 
+jobs:
+  Test-and-Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Repository
+        uses: actions/checkout@v6
+      - name: Setting Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: 25
+      - name: Maven Test and Build verify phase
+        run: mvn -B -U verify
+      - uses: actions/upload-artifact@v4
+      - name: Generate Artifact  
+        run: mkdir staging && cp target/*.jar staging/app.jar
+        with:
+          name: App
+          path: staging/app.jar
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./target/site/jacoco/jacoco.xml
+          fail_ci_if_error: true
+        if: always()	

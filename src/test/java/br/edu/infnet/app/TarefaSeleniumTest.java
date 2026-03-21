@@ -4,6 +4,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,7 @@ import java.time.Duration;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -32,7 +34,14 @@ public class TarefaSeleniumTest {
 
     @BeforeEach
     void setUp() {
-        driver = new ChromeDriver();
+    	ChromeOptions options = new ChromeOptions();
+    	options.addArguments("--headless=new");
+    	options.addArguments("--window-size=1440,900");
+    	options.addArguments("--no-sandbox");
+    	options.addArguments("--disable-dev-shm-usage");
+    	options.addArguments("--disable-gpu");
+        driver = new ChromeDriver(options);
+        driver.manage().window().setSize(new Dimension(1440, 900));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().window().maximize();
         driver.get("http://localhost:" + port + "/index.html");
@@ -85,7 +94,13 @@ public class TarefaSeleniumTest {
         wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("#task-list tr"), 1));
 
         // Abre o modal de edição
-        driver.findElement(By.xpath("//tr[td[contains(.,'Tarefa para editar')]]//button[@title= 'Editar']")).click();
+        WebElement button = driver.findElement(By.xpath("//tr[td[contains(.,'Tarefa para editar')]]//button[@title='Editar']"));
+        wait.until(ExpectedConditions.elementToBeClickable(button));
+        try {
+            button.click();
+        } catch (ElementClickInterceptedException e) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", button);
+        }
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("taskModal")));
 
         WebElement descricaoModal = driver.findElement(By.id("descricao"));
@@ -112,7 +127,12 @@ public class TarefaSeleniumTest {
         wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("#task-list tr"), 2));
 
         // Exclui a tarefa
-        driver.findElement(By.xpath("//tr[td[contains(.,'Tarefa para excluir')]]//button[@title= 'Excluir']")).click();
+        WebElement button = driver.findElement(By.xpath("//tr[td[contains(.,'Tarefa para excluir')]]//button[@title='Excluir']"));
+        try {
+            button.click();
+        } catch (ElementClickInterceptedException e) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", button);
+        }
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
         alert.accept();
 

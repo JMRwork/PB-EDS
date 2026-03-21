@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.edu.infnet</groupId>
-	<artifactId>PB-TP3</artifactId>
+	<artifactId>PB-EDS</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>PB-TP3</name>
-	<description>Projeto de Bloco: Engenharia Disciplinada</description>
+	<name>PB-EDS</name>
+	<description>Projeto de Bloco: Engenharia Disciplinada de Software</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -95,10 +95,43 @@
         	<version>5.7.0</version>
         	<scope>test</scope>
     	</dependency>
+    	<dependency>
+		    <groupId>org.jacoco</groupId>
+		    <artifactId>jacoco-maven-plugin</artifactId>
+		    <version>0.8.14</version>
+		    <scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+  				<artifactId>jacoco-maven-plugin</artifactId>
+  				<version>0.8.14</version>
+  				<executions>
+	  				<execution>
+					    <id>jacoco-check</id>
+					    <goals>
+					    	<goal>prepare-agent</goal>
+					        <goal>check</goal>
+					        <goal>report</goal>
+					    </goals>
+					    <configuration>				    	
+					        <rules>
+					            <rule>
+					                <limits>
+					                    <limit>
+					                        <value>COVEREDRATIO</value>
+					                        <minimum>0.85</minimum>
+					                    </limit>
+					                </limits>
+					            </rule>
+					        </rules>
+					    </configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
