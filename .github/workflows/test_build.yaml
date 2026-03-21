@@ -18,15 +18,16 @@ jobs:
           java-version: 25
       - name: Maven Test and Build verify phase
         run: mvn -B -U verify
-      - name: Generate Artifact  
+      - name: Generate Artifacts  
         run: mkdir staging && cp target/*.jar staging/app.jar
-      - uses: actions/upload-artifact@v4
+      - name: Upload Jar
+        uses: actions/upload-artifact@v4
         with:
           name: App
           path: staging/app.jar
-      - name: Upload coverage to Codecov
+      - name: Upload coverage
         uses: codecov/codecov-action@v4
         with:
-          file: ./target/site/jacoco/jacoco.xml
-          fail_ci_if_error: true
-        if: always()	
+          name: Code Coverage Report
+          path: ./target/site/jacoco/index.html
+          	
