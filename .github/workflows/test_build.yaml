@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: 25
+          java-version: 21
       - name: Maven Test and Build verify phase
         run: mvn -B -U verify
       - name: Generate Artifacts  
