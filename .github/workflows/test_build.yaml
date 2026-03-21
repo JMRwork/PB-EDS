@@ -30,4 +30,3 @@ jobs:
         with:
           name: Code Coverage Report
           path: target/site/jacoco
-          	
