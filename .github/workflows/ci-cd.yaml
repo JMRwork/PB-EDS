@@ -21,6 +21,10 @@ on:
 jobs:
   Test-and-Build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      id-token: write
     steps:
       - name: Get Repository
         uses: actions/checkout@v6
