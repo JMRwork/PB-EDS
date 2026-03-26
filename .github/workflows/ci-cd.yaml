@@ -69,12 +69,15 @@ jobs:
     needs: Test-and-Build
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'release'
     steps:
-      - name: Get Repository
-        uses: actions/checkout@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: App
+          path: .
     
       - name: Start Application for DAST
         run: |
-          java -jar staging/app.jar &
+          java -jar app.jar &
           sleep 30
         working-directory: .
       
