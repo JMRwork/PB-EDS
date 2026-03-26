@@ -114,8 +114,8 @@ jobs:
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
-          name: app-build
-          path: deploy-artifact
+          name: App
+          path: .
     
       - name: Configure Deploy Platform
         run: | 
